@@ -1,3 +1,4 @@
+
 import pygame
 from typing import Optional, Tuple, List
 from game_logic import count_live_cells
@@ -5,7 +6,7 @@ from constants import (
     COLOR_ALIVE, COLOR_DEAD, COLOR_GRID, COLOR_FONT,
     FONT_NAME, FONT_SIZE
 )
-from ru_local import SYSTEM, UI  # Исправлен импорт
+from ru_local import SYSTEM, UI
 
 Grid = List[List[int]]
 
@@ -95,7 +96,6 @@ def draw_grid(
     rows: int = len(grid)
     cols: int = len(grid[0]) if rows > 0 else 0
 
-    # Draw live cells
     for row in range(rows):
         for col in range(cols):
             if grid[row][col] == 1:
@@ -108,7 +108,6 @@ def draw_grid(
                      cell_size)
                 )
 
-    # Draw vertical grid lines
     for x in range(0, cols * cell_size, cell_size):
         pygame.draw.line(
             screen,
@@ -117,7 +116,6 @@ def draw_grid(
             (x, rows * cell_size)
         )
 
-    # Draw horizontal grid lines
     for y in range(0, rows * cell_size, cell_size):
         pygame.draw.line(
             screen,

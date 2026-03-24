@@ -1,8 +1,8 @@
-import random
-from constants import ROWS, COLS, RANDOM_PROB
-from ru_local import FILES, ERRORS, PRESETS  # Исправлен импорт
 
-# Dictionary of preset patterns
+import random
+from constants import RANDOM_PROB
+from ru_local import FILES, ERRORS
+
 PRESET_PATTERNS = {'block': [(0, 0), (0, 1), (1, 0), (1, 1)]}
 
 
@@ -22,7 +22,8 @@ def create_empty_grid(rows, columns):
 
 def random_grid(rows, columns, prob=RANDOM_PROB):
     """
-    Generate a random grid where each cell has probability 'prob' of being alive.
+    Generate a random grid where each cell has probability 
+        'prob' of being alive.
 
     Args:
         rows: Number of rows

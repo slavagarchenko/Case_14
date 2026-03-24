@@ -1,6 +1,3 @@
-"""
-Localization for Conway's Game of Life
-"""
 
 # ==================== SYSTEM MESSAGES ====================
 SYSTEM = {
