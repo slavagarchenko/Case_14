@@ -11,11 +11,8 @@ from ru_local import SYSTEM, UI
 Grid = List[List[int]]
 
 
-def init_display(
-        rows: int,
-        cols: int,
-        cell_size: int = 20
-) -> Tuple[pygame.Surface, int, int]:
+def init_display(rows: int, cols: int,
+                 cell_size: int = 20) -> Tuple[pygame.Surface, int, int]:
     """
     Initialize the Pygame display window.
 
@@ -38,13 +35,8 @@ def init_display(
     return screen, width, height
 
 
-def draw_ui(
-    screen: pygame.Surface,
-    grid: Grid,
-    generation: int,
-    speed: float,
-    running: bool = True
-) -> None:
+def draw_ui(screen: pygame.Surface, grid: Grid, generation: int,
+            speed: float, running: bool = True) -> None:
     """
     Draw the user interface overlay with game information.
 
@@ -74,13 +66,8 @@ def draw_ui(
     screen.blit(text_surface, (10, 10))
 
 
-def draw_grid(
-    screen: pygame.Surface,
-    grid: Grid,
-    generation: int,
-    speed: float,
-    cell_size: int = 20
-) -> None:
+def draw_grid(screen: pygame.Surface, grid: Grid, generation: int,
+              speed: float, cell_size: int = 20) -> None:
     """
     Draw the complete game grid with cells and grid lines.
 
@@ -129,10 +116,8 @@ def draw_grid(
     pygame.display.update()
 
 
-def get_cell_from_mouse(
-    pos: Tuple[int, int],
-    cell_size: int
-) -> Optional[Tuple[int, int]]:
+def get_cell_from_mouse(pos: Tuple[int, int], cell_size: int
+                        ) -> Optional[Tuple[int, int]]:
     """
     Convert mouse screen coordinates to grid cell coordinates.
 

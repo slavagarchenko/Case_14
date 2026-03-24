@@ -215,10 +215,8 @@ def copy_grid(grid: Grid) -> Grid:
     return [row[:] for row in grid]
 
 
-def create_pattern_grid(rows: int, cols: int,
-                        pattern: List[Tuple[int, int]],
-                        offset_row: int = 0,
-                        offset_col: int = 0) -> Grid:
+def create_pattern_grid(rows: int, cols: int, pattern: List[Tuple[int, int]],
+                        offset_row: int = 0, offset_col: int = 0) -> Grid:
     """
     Create a grid with a specific pattern of live cells.
 

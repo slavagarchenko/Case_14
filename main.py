@@ -14,13 +14,8 @@ from ru_local import SYSTEM, SIMULATION, FILES
 Grid = List[List[int]]
 
 
-def handle_events(
-        grid: Grid,
-        running_flag: bool,
-        speed: int,
-        generation: int,
-        initial_grid: Grid
-) -> Tuple[Grid, bool, int, int]:
+def handle_events(grid: Grid, running_flag: bool, speed: int, generation: int,
+                  initial_grid: Grid) -> Tuple[Grid, bool, int, int]:
     """
     Handle all pygame events and update game state accordingly.
 

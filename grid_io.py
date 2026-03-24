@@ -1,12 +1,17 @@
-
 import random
+from typing import List, Tuple
 from constants import RANDOM_PROB
 from ru_local import FILES, ERRORS
 
-PRESET_PATTERNS = {'block': [(0, 0), (0, 1), (1, 0), (1, 1)]}
+Grid = List[List[int]]
+Coordinates = List[Tuple[int, int]]
+
+PRESET_PATTERNS: dict[str, Coordinates] = {
+    'block': [(0, 0), (0, 1), (1, 0), (1, 1)]
+}
 
 
-def create_empty_grid(rows, columns):
+def create_empty_grid(rows: int, columns: int) -> Grid:
     """
     Create a grid filled with zeros.
 
@@ -20,7 +25,7 @@ def create_empty_grid(rows, columns):
     return [[0] * columns for _ in range(rows)]
 
 
-def random_grid(rows, columns, prob=RANDOM_PROB):
+def random_grid(rows: int, columns: int, prob: float = RANDOM_PROB) -> Grid:
     """
     Generate a random grid where each cell has probability 
         'prob' of being alive.
@@ -33,7 +38,7 @@ def random_grid(rows, columns, prob=RANDOM_PROB):
     Returns:
         2D list with random live cells
     """
-    grid = create_empty_grid(rows, columns)
+    grid: Grid = create_empty_grid(rows, columns)
     for row in range(rows):
         for col in range(columns):
             if random.random() < prob:
@@ -43,7 +48,7 @@ def random_grid(rows, columns, prob=RANDOM_PROB):
     return grid
 
 
-def reading_grid(filename, rows, columns):
+def reading_grid(filename: str, rows: int, columns: int) -> Grid:
     """
     Read grid configuration from a file.
     File format: each line contains "row col" coordinates of live cells.
@@ -56,16 +61,17 @@ def reading_grid(filename, rows, columns):
     Returns:
         2D list with live cells set according to file content
     """
-    grid = create_empty_grid(rows, columns)
+    grid: Grid = create_empty_grid(rows, columns)
     try:
         with open(filename, 'r') as f:
             for line in f:
-                line = line.strip()
+                line: str = line.strip()
                 if not line:
                     continue
-                parts = line.split()
+                parts: List[str] = line.split()
                 if len(parts) == 2:
-                    r, c = int(parts[0]), int(parts[1])
+                    r: int = int(parts[0])
+                    c: int = int(parts[1])
                     if 0 <= r < rows and 0 <= c < columns:
                         grid[r][c] = 1
                     else:
@@ -75,7 +81,7 @@ def reading_grid(filename, rows, columns):
     return grid
 
 
-def writing_grid(grid, filename):
+def writing_grid(grid: Grid, filename: str) -> None:
     """
     Write grid configuration to a file.
     Writes coordinates of all live cells, one per line.
@@ -91,7 +97,7 @@ def writing_grid(grid, filename):
                     f.write(f'{row} {col}\n')
 
 
-def set_cell(grid, row, col, value):
+def set_cell(grid: Grid, row: int, col: int, value: int) -> None:
     """
     Set a cell to a specific value if coordinates are valid.
 
@@ -105,7 +111,7 @@ def set_cell(grid, row, col, value):
         grid[row][col] = value
 
 
-def get_presets_names():
+def get_presets_names() -> List[str]:
     """
     Get list of available preset pattern names.
 
@@ -115,7 +121,8 @@ def get_presets_names():
     return list(PRESET_PATTERNS.keys())
 
 
-def load_preset(name, rows, columns, offset_row=0, offset_col=0):
+def load_preset(name: str, rows: int, columns: int, offset_row: int = 0,
+                offset_col: int = 0) -> Grid:
     """
     Load a preset pattern into a grid.
 
@@ -132,9 +139,11 @@ def load_preset(name, rows, columns, offset_row=0, offset_col=0):
     if name not in PRESET_PATTERNS:
         print(ERRORS["preset_not_found"])
         return create_empty_grid(rows, columns)
-    grid = create_empty_grid(rows, columns)
+
+    grid: Grid = create_empty_grid(rows, columns)
     for r, c in PRESET_PATTERNS[name]:
-        nr, nc = r + offset_row, c + offset_col
+        nr: int = r + offset_row
+        nc: int = c + offset_col
         if 0 <= nr < rows and 0 <= nc < columns:
             grid[nr][nc] = 1
     return grid
