@@ -1,4 +1,3 @@
-
 import pygame
 from typing import Optional, Tuple, List
 from game_logic import count_live_cells
@@ -7,6 +6,7 @@ from constants import (
     FONT_NAME, FONT_SIZE
 )
 from ru_local import SYSTEM, UI
+
 
 Grid = List[List[int]]
 
