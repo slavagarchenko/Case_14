@@ -3,6 +3,7 @@ from typing import List, Tuple
 from constants import RANDOM_PROB
 from ru_local import FILES, ERRORS
 
+
 Grid = List[List[int]]
 Coordinates = List[Tuple[int, int]]
 
