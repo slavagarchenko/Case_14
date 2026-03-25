@@ -5,11 +5,6 @@ from ru_local import FILES, ERRORS
 
 
 Grid = List[List[int]]
-Coordinates = List[Tuple[int, int]]
-
-PRESET_PATTERNS: dict[str, Coordinates] = {
-    'block': [(0, 0), (0, 1), (1, 0), (1, 1)]
-}
 
 
 def create_empty_grid(rows: int, columns: int) -> Grid:
@@ -111,40 +106,3 @@ def set_cell(grid: Grid, row: int, col: int, value: int) -> None:
     if 0 <= row < len(grid) and 0 <= col < len(grid[0]):
         grid[row][col] = value
 
-
-def get_presets_names() -> List[str]:
-    """
-    Get list of available preset pattern names.
-
-    Returns:
-        List of preset names
-    """
-    return list(PRESET_PATTERNS.keys())
-
-
-def load_preset(name: str, rows: int, columns: int, offset_row: int = 0,
-                offset_col: int = 0) -> Grid:
-    """
-    Load a preset pattern into a grid.
-
-    Args:
-        name: Name of the preset pattern
-        rows: Number of rows in the grid
-        columns: Number of columns in the grid
-        offset_row: Row offset for placing the pattern
-        offset_col: Column offset for placing the pattern
-
-    Returns:
-        2D list with preset pattern placed at specified offset
-    """
-    if name not in PRESET_PATTERNS:
-        print(ERRORS["preset_not_found"])
-        return create_empty_grid(rows, columns)
-
-    grid: Grid = create_empty_grid(rows, columns)
-    for r, c in PRESET_PATTERNS[name]:
-        nr: int = r + offset_row
-        nc: int = c + offset_col
-        if 0 <= nr < rows and 0 <= nc < columns:
-            grid[nr][nc] = 1
-    return grid
