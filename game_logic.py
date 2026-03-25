@@ -27,22 +27,22 @@ def count_live_neighbors(grid: Grid, row: int, col: int,
 
     live_count = 0
 
-    for dr in [-1, 0, 1]:
-        for dc in [-1, 0, 1]:
-            if dr == 0 and dc == 0:
+    for row_offset in [-1, 0, 1]:
+        for col_offset in [-1, 0, 1]:
+            if row_offset == 0 and col_offset == 0:
                 continue
 
             if toroidal:
-                r = (row + dr) % rows
-                c = (col + dc) % cols
+                neighbor_row = (row + row_offset) % rows
+                neighbor_col = (col + col_offset) % cols
             else:
-                r = row + dr
-                c = col + dc
+                neighbor_row = row + row_offset
+                neighbor_col = col + col_offset
 
-                if r < 0 or r >= rows or c < 0 or c >= cols:
+                if neighbor_row < 0 or neighbor_row >= rows or neighbor_col < 0 or neighbor_col >= cols:
                     continue
 
-            live_count += grid[r][c]
+            live_count += grid[neighbor_row][neighbor_col]
 
     return live_count
 
@@ -72,23 +72,23 @@ def next_generation(grid: Grid, toroidal: bool = True) -> Grid:
 
     new_grid = [[0 for _ in range(cols)] for _ in range(rows)]
 
-    for row in range(rows):
-        for col in range(cols):
+    for current_row in range(rows):
+        for current_col in range(cols):
             live_neighbors = count_live_neighbors(
-                grid, row, col, toroidal
+                grid, current_row, current_col, toroidal
             )
-            current_cell = grid[row][col]
+            current_cell = grid[current_row][current_col]
 
             if current_cell == 1:
                 if live_neighbors in (2, 3):
-                    new_grid[row][col] = 1
+                    new_grid[current_row][current_col] = 1
                 else:
-                    new_grid[row][col] = 0
+                    new_grid[current_row][current_col] = 0
             else:
                 if live_neighbors == 3:
-                    new_grid[row][col] = 1
+                    new_grid[current_row][current_col] = 1
                 else:
-                    new_grid[row][col] = 0
+                    new_grid[current_row][current_col] = 0
 
     return new_grid
 
@@ -111,23 +111,9 @@ def apply_boundary(row: int, col: int, rows: int, cols: int,
     if toroidal:
         return row % rows, col % cols
 
-    r = max(0, min(row, rows - 1))
-    c = max(0, min(col, cols - 1))
-    return r, c
-
-
-def is_stable(grid: Grid, next_grid: Grid) -> bool:
-    """
-    Check if the grid has reached a stable state.
-
-    Args:
-        grid: Current grid state
-        next_grid: Next generation grid state
-
-    Returns:
-        True if grids are identical, False otherwise
-    """
-    return grid == next_grid
+    clamped_row = max(0, min(row, rows - 1))
+    clamped_col = max(0, min(col, cols - 1))
+    return clamped_row, clamped_col
 
 
 def count_live_cells(grid: Grid) -> int:
@@ -154,10 +140,10 @@ def get_live_cells(grid: Grid) -> List[Tuple[int, int]]:
         List of (row, col) tuples for live cells
     """
     cells = []
-    for row in range(len(grid)):
-        for col in range(len(grid[0])):
-            if grid[row][col] == 1:
-                cells.append((row, col))
+    for row_idx in range(len(grid)):
+        for col_idx in range(len(grid[0])):
+            if grid[row_idx][col_idx] == 1:
+                cells.append((row_idx, col_idx))
     return cells
 
 
@@ -172,10 +158,10 @@ def get_dead_cells(grid: Grid) -> List[Tuple[int, int]]:
         List of (row, col) tuples for dead cells
     """
     cells = []
-    for row in range(len(grid)):
-        for col in range(len(grid[0])):
-            if grid[row][col] == 0:
-                cells.append((row, col))
+    for row_idx in range(len(grid)):
+        for col_idx in range(len(grid[0])):
+            if grid[row_idx][col_idx] == 0:
+                cells.append((row_idx, col_idx))
     return cells
 
 
@@ -193,9 +179,9 @@ def compare_grids(grid1: Grid, grid2: Grid) -> bool:
     if len(grid1) != len(grid2) or len(grid1[0]) != len(grid2[0]):
         return False
 
-    for row in range(len(grid1)):
-        for col in range(len(grid1[0])):
-            if grid1[row][col] != grid2[row][col]:
+    for row_idx in range(len(grid1)):
+        for col_idx in range(len(grid1[0])):
+            if grid1[row_idx][col_idx] != grid2[row_idx][col_idx]:
                 return False
 
     return True
@@ -231,12 +217,12 @@ def create_pattern_grid(rows: int, cols: int, pattern: List[Tuple[int, int]],
     """
     grid = [[0 for _ in range(cols)] for _ in range(rows)]
 
-    for r, c in pattern:
-        new_r = r + offset_row
-        new_c = c + offset_col
+    for pattern_row, pattern_col in pattern:
+        new_row = pattern_row + offset_row
+        new_col = pattern_col + offset_col
 
-        if 0 <= new_r < rows and 0 <= new_c < cols:
-            grid[new_r][new_c] = 1
+        if 0 <= new_row < rows and 0 <= new_col < cols:
+            grid[new_row][new_col] = 1
 
     return grid
 
@@ -263,19 +249,19 @@ def get_neighborhood(grid: Grid, row: int, col: int,
     size = 2 * radius + 1
     neighborhood = [[0 for _ in range(size)] for _ in range(size)]
 
-    for dr in range(-radius, radius + 1):
-        for dc in range(-radius, radius + 1):
+    for row_offset in range(-radius, radius + 1):
+        for col_offset in range(-radius, radius + 1):
             if toroidal:
-                r = (row + dr) % rows
-                c = (col + dc) % cols
+                neighbor_row = (row + row_offset) % rows
+                neighbor_col = (col + col_offset) % cols
             else:
-                r = row + dr
-                c = col + dc
+                neighbor_row = row + row_offset
+                neighbor_col = col + col_offset
 
-                if r < 0 or r >= rows or c < 0 or c >= cols:
+                if neighbor_row < 0 or neighbor_row >= rows or neighbor_col < 0 or neighbor_col >= cols:
                     continue
 
-            neighborhood[dr + radius][dc + radius] = grid[r][c]
+            neighborhood[row_offset + radius][col_offset + radius] = grid[neighbor_row][neighbor_col]
 
     return neighborhood
 
@@ -401,9 +387,9 @@ def get_cell_state(grid: Grid, row: int, col: int,
         rows, cols = get_dimensions(grid)
         if rows == 0 or cols == 0:
             return default
-        r = row % rows
-        c = col % cols
-        return grid[r][c]
+        wrapped_row = row % rows
+        wrapped_col = col % cols
+        return grid[wrapped_row][wrapped_col]
 
     if validate_coordinates(grid, row, col):
         return grid[row][col]
