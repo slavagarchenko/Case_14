@@ -1,4 +1,3 @@
-
 import pygame
 from typing import List, Tuple
 
@@ -10,6 +9,7 @@ from constants import (
     SPEED_STEP, FILENAME, RANDOM_PROB
 )
 from ru_local import SYSTEM, SIMULATION, FILES
+
 
 Grid = List[List[int]]
 
